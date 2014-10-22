@@ -22,8 +22,3 @@ execute "give_docker_non_root_access" do
 	user "root"
 	command "gpasswd -a ubuntu docker"
 end
-
-service "docker" do
-	supports :restart => true
-	action :restart
-end
