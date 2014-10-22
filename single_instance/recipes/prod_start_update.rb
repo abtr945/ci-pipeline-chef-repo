@@ -28,11 +28,11 @@ end
 # from the given Docker registry host:port
 execute "pull_docker_image" do
 	user "root"
-	command "docker pull node[:jenkins][:dockerregistry]/node[:jenkins][:jobname]:node[:jenkins][:buildnumber]"
+	command "docker pull node[:jenkins][:dockerimage]"
 end
 
 # Spawn a Docker container whose name is the name of the Jenkins JobName
 execute "spawn_docker_container" do
 	user "root"
-	command "docker run --name node[:jenkins][:jobname] node[:jenkins][:dockerregistry]/node[:jenkins][:jobname]:node[:jenkins][:buildnumber]"
+	command "docker run --name node[:jenkins][:jobname] node[:jenkins][:dockerimage]"
 end

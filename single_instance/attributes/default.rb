@@ -1,6 +1,5 @@
 # Dummy values for attributes.
 # Will be overriden by custom JSON each time the recipe is run
 
-default[:jenkins][:dockerregistry] = "dummy-docker-registry"
 default[:jenkins][:jobname] = "dummy-job-name"
-default[:jenkins][:buildnumber] = "123"
+default[:jenkins][:dockerimage] = "dummy-docker-registry-host:5000/dummy-docker-image:latest"
