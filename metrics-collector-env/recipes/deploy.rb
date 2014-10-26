@@ -1,8 +1,11 @@
-# prod_start_update.rb
+# deploy.rb
 #
 # Author: An Binh Tran
 #
-# Start a Production environment for the application, or update a current Environment
+# Deploy Docker container of the application on the Opsworks Environment.
+#
+# The purpose of the container can be for running tests (in TESTING environment),
+# or for PRODUCTION purposes.
 #
 
 # Define a check whether a Docker container with the same name as Jenkins JobName is currently running
