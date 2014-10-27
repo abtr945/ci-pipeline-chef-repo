@@ -32,11 +32,6 @@ if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 		user "root"
 		command "gpasswd -a ubuntu docker"
 	end
-	
-	# Restart service
-	service "docker" do
-		action :restart
-	end
 
 	log "testing_setup_complete" do
     	message "TESTING: setup completed"
