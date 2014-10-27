@@ -8,6 +8,13 @@
 # or for PRODUCTION purposes.
 #
 
+# For logging purposes, output the value of jobname and dockerimage
+log "log_attributes" do
+	message "job_name: node[:jenkins][:jobname]; docker_image: node[:jenkins][:dockerimage]"
+    level :info
+end
+
+
 # Define a check whether a Docker container with the same name as Jenkins JobName is currently running
 # Return TRUE if found, FALSE otherwise
 execute "old_docker_container_found" do
