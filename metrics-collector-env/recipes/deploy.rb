@@ -50,16 +50,33 @@ end
 # For TESTING environment:
 if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 
-	# Spawn a Docker container to test the Application
-	log "spawn_container_testing_log" do
-		message "TESTING: Spawn new Docker container for testing the Application"
-    	level :info
-	end
+	# If testing environment triggered by COMMIT BUILD (i.e. test_short)
+	if node[:opsworks][:instance][:hostname] =~ /^test_short.*$/
+	
+		# Spawn a Docker container to test the Application (short tests only)
+		log "spawn_container_testing_short_log" do
+			message "TESTING: Spawn new Docker container for testing the Application (short tests only)"
+			level :info
+		end
 
-	execute "spawn_docker_container_testing" do
-		user "root"
-		command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]}"
-	end
+		execute "spawn_docker_container_testing_short" do
+			user "root"
+			command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb'"
+		end
+		
+	# Else, testing environment triggered by PERIODIC BUILD (i.e. test_full)
+	else
+	
+		# Spawn a Docker container to test the Application (full test suite)
+		log "spawn_container_testing_full_log" do
+			message "TESTING: Spawn new Docker container for testing the Application (full test suite)"
+			level :info
+		end
+
+		execute "spawn_docker_container_testing_full" do
+			user "root"
+			command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb ; /usr/bin/ruby /project/dockertests/long_test_suite.rb'"
+		end
 
 	
 # For PRODUCTION environment:	
