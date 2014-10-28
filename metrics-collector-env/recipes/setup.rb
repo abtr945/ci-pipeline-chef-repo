@@ -45,7 +45,7 @@ execute "give_docker_non_root_access" do
 end
 
 
-# Setup process exclusively for TESTING environment (i.e. instance hostname is "test_short1", "test_full2", etc.)
+# Setup process exclusively for TESTING environment (i.e. instance hostname is "test-short1", "test-full2", etc.)
 if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 
 	log "testing_setup_start" do

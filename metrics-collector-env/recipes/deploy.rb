@@ -50,8 +50,8 @@ end
 # For TESTING environment:
 if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 
-	# If testing environment triggered by COMMIT BUILD (i.e. test_short)
-	if node[:opsworks][:instance][:hostname] =~ /^test_short.*$/
+	# If testing environment triggered by COMMIT BUILD (i.e. test-short)
+	if node[:opsworks][:instance][:hostname] =~ /^test-short.*$/
 	
 		# Spawn a Docker container to test the Application (short tests only)
 		log "spawn_container_testing_short_log" do
@@ -64,7 +64,7 @@ if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 			command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb'"
 		end
 		
-	# Else, testing environment triggered by PERIODIC BUILD (i.e. test_full)
+	# Else, testing environment triggered by PERIODIC BUILD (i.e. test-full)
 	else
 	
 		# Spawn a Docker container to test the Application (full test suite)
