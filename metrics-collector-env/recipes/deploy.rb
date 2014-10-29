@@ -78,7 +78,7 @@ if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 			command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb ; /usr/bin/ruby /project/dockertests/long_test_suite.rb'"
 		end
 
-	end
+	#end
 	
 # For PRODUCTION environment:	
 else
