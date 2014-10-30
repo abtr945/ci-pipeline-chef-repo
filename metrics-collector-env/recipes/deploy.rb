@@ -91,8 +91,8 @@ else
 	
 	execute "spawn_docker_container_production" do
 		user "root"
-		#command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &"
-		command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} sh -c 'exit 1'"
+		command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &"
+		#command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} sh -c 'exit 1'"
 	end
 
 end
