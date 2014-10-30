@@ -78,7 +78,7 @@ if node[:opsworks][:instance][:hostname] =~ /^test.*$/
 			command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb ; /usr/bin/ruby /project/dockertests/long_test_suite.rb'"
 		end
 
-	#end
+	end
 	
 # For PRODUCTION environment:	
 else
@@ -91,7 +91,8 @@ else
 	
 	execute "spawn_docker_container_production" do
 		user "root"
-		command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &"
+		#command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &"
+		command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} sh -c 'exit 1'"
 	end
 
 end
