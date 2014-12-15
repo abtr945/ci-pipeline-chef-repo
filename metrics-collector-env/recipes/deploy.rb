@@ -16,7 +16,7 @@ end
 
 # If value of "jobname" attribute is a Dummy one, do not do anything (since it means the recipe is being executed at setup phase)
 # "jobname" and "dockerimage" attributes are supposed to be overriden when this recipe is triggered manually
-if node[:jenkins][:jobname] == "__DUMMY_JOB_NAME__" do
+if node[:jenkins][:jobname] == "__DUMMY_JOB_NAME__"
 
 	log "run_at_env_setup_phase" do
 		message "Deploy recipe is currently running in Environment Setup phase, don't do anything..."
