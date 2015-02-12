@@ -56,6 +56,10 @@ else
 		command "docker pull #{node[:jenkins][:dockerimage]}"
 	end
 
+results = "/tmp/output.txt"
+file results do
+    action :delete
+end
 
 	# For TESTING environment:
 	if node[:opsworks][:instance][:hostname] =~ /^test.*$/
@@ -71,7 +75,7 @@ else
 
 			execute "spawn_docker_container_testing_short" do
 				user "root"
-				command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb'"
+				command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb'> #{results}"
 			end
 		
 		# Else, testing environment triggered by PERIODIC BUILD (i.e. test-full)
@@ -85,7 +89,7 @@ else
 
 			execute "spawn_docker_container_testing_full" do
 				user "root"
-				command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb ; /usr/bin/ruby /project/dockertests/long_test_suite.rb'"
+				command "docker run --name #{node[:jenkins][:jobname]} #{node[:jenkins][:dockerimage]} sh -c '/opt/tomcat7/bin/startup.sh && sleep 20 && /usr/bin/ruby /project/dockertests/short_test_suite.rb ; /usr/bin/ruby /project/dockertests/long_test_suite.rb'> #{results}"
 			end
 
 		end
@@ -101,10 +105,20 @@ else
 	
 		execute "spawn_docker_container_production" do
 			user "root"
-			command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &"
+			command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} &> #{results}"
 			#command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]} sh -c 'exit 1'"
 		end
 
 	end
+	
+	ruby_block "Results" do
+    only_if { ::File.exists?(results) }
+    block do
+        print "\n"
+        File.open(results).each do |line|
+            print line
+        end
+    end
+end
 	
 end
