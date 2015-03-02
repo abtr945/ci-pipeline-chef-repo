@@ -18,22 +18,33 @@ log "log_attributes" do
 	level :info
 end
 
-script "stop_remove_old_docker_container" do
-	interpreter "bash"
-	user "root"
-	code <<-EOH
-	docker stop #{node[:jenkins][:jobname]}
-	docker rm #{node[:jenkins][:jobname]}
-	EOH
-	only_if "docker ps -a | grep #{node[:jenkins][:jobname]}"
-end
+if (node[:jenkins][:jobname] == "") or (node[:jenkins][:dockerimage] == "")
 
-execute "pull_docker_image" do
-	user "root"
-	command "docker pull #{node[:jenkins][:dockerimage]}"
-end
+	log "attributes_not_provided" do
+		message "Jenkins Job name and/or Docker Image URL not provided!"
+		level :error
+	end
 
-execute "spawn_docker_container_production" do
-	user "root"
-	command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]}"
+else
+
+	script "stop_remove_old_docker_container" do
+		interpreter "bash"
+		user "root"
+		code <<-EOH
+		docker stop #{node[:jenkins][:jobname]}
+		docker rm #{node[:jenkins][:jobname]}
+		EOH
+		only_if "docker ps -a | grep #{node[:jenkins][:jobname]}"
+	end
+
+	execute "pull_docker_image" do
+		user "root"
+		command "docker pull #{node[:jenkins][:dockerimage]}"
+	end
+
+	execute "spawn_docker_container_production" do
+		user "root"
+		command "docker run --name #{node[:jenkins][:jobname]} -p 8080:8080 #{node[:jenkins][:dockerimage]}"
+	end
+
 end
