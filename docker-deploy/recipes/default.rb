@@ -29,10 +29,7 @@ end
 if (node[:jenkins][:jobname] == "") or (node[:jenkins][:dockerimage] == "")
 
 	# Deployment will fail if attributes not provided
-	log "deployment_attributes_not_provided" do
-		message "Jenkins Job name and/or Docker Image URL not provided!"
-		level :error
-	end
+	Chef::Application.fatal!("Jenkins Job name and/or Docker Image URL not provided!", 1)
 
 else
 
